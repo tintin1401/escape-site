@@ -14,7 +14,7 @@ import { useUser } from '../../context/UserContext.jsx';
 export function CarouselCard({setIsOpen}) {
   const { user } = useUser();
 
-  const url = `http://localhost/escape-desarrollo-backend/public/api/companies/`+user.id;
+  const url = `http://207.246.65.163/api/companies/`+user.id;
   const { data: companies, loading, error } = useFetchData(url);
 
   if (loading) {
