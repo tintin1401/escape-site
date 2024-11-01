@@ -6,6 +6,7 @@ import { AuthCarousel } from "./AuthCaruosel";
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from "react";
 import useFetchData from "../hooks/useFetchData.js";
+import logo from "../../assets/imgs/logo-celeste.png";
 
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -323,7 +324,7 @@ export function SignUpCompanies() {
             <div className="flex justify-center items-center">
 
                 <form className="ww-full lg:w-2/4" onSubmit={handleSubmit}>
-                    <img className="w-[15rem] mx-auto mt-8 mb-16 " src="../src/assets/imgs/logo-celeste.png" alt="Logo" />
+                    <img className="w-[15rem] mx-auto mt-8 mb-16 " src={logo} alt="Logo" />
                     <div className="grid lg:grid-cols-2 gap-4">
                         <div>
                             <AuthInput label={t('iCompanyName')} name="name" placeholder={t('iCompanyName')} type="text" onChange={e => setName(e.target.value)} className="{nameError ? 'border-red-500' : ''}"/> {nameError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}

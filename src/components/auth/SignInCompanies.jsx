@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useUser } from "../../context/UserContext.jsx";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import logo from "../../assets/imgs/logo-celeste.png";
 
 export function SignInCompanies() {
     const { t } = useTranslation();
@@ -14,10 +15,10 @@ export function SignInCompanies() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const { user, setUser } = useUser();
+    const {  setUser } = useUser();
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [ setErrorMessage] = useState('');
 
     const validateFields = () => {
         if (!email || !password) {
@@ -72,7 +73,7 @@ export function SignInCompanies() {
         <div className="grid justify-center items-center h-[100vh] md:grid-cols-2 gap-4">
         <div className="flex justify-center items-center">
             <form className="w-full lg:w-2/4 " onSubmit={handleSubmit}>
-                <img className="w-[15rem] mx-auto mt-8 mb-16 " src="../src/assets/imgs/logo-celeste.png" alt="Logo" />
+                <img className="w-[15rem] mx-auto mt-8 mb-16 " src={logo} alt="Logo" />
 
                 <AuthInput name="email" placeholder={t('iEmail')} type="email" onChange={e => setEmail(e.target.value)}/>
                 <AuthInput name="password" placeholder={t('iPassword')} type="password" className="mb-4 lg:mb-4" onChange={e => setPassword(e.target.value)}/>

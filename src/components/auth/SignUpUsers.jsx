@@ -8,6 +8,7 @@ import { useState } from "react";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useEffect } from "react";
+import logo from "../../assets/imgs/logo-celeste.png";
 
 export function SignUpUsers() {
 
@@ -31,7 +32,6 @@ export function SignUpUsers() {
     const navigate = useNavigate();
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
-    const [errorMessage, setErrormessage] = useState('');
     const [districts, setDistricts] = useState([]);
 
     const [nameError, setNameError] = useState(false);
@@ -58,28 +58,7 @@ export function SignUpUsers() {
         { id: "10", name: "Garabito" },
     ];
 
-    const district_id = [
-        { id: "1", name: "Puntarenas" },
-        { id: "2", name: "Pitahaya" },
-        { id: "3", name: "Chomes" },
-        { id: "4", name: "Lepanto" },
-        { id: "5", name: "Paquera" },
-        { id: "6", name: "Manzanillo" },
-        { id: "7", name: "Guacimal" },
-        { id: "8", name: "Barranca" },
-        { id: "9", name: "Monteverde" },
-        { id: "10", name: "Isla del Coco" },
-        { id: "11", name: "Cóbano" },
-        { id: "12", name: "Chacarita" },
-        { id: "13", name: "Chira" },
-        { id: "14", name: "Acapulco" },
-        { id: "15", name: "El Roble" },
-        { id: "16", name: "Esparza centro" },
-        { id: "17", name: "Espíritu Santo" },
-        { id: "18", name: "San Juan" },
-        { id: "19", name: "San Rafael" },
-        { id: "20", name: "San Jerónimo" },
-    ];
+    
 
     const preferences_1 = [
         { id: "1", name: "Restaurantes" },
@@ -159,7 +138,7 @@ export function SignUpUsers() {
     useEffect(() => {
         if (selectedCanton) {
 
-            fetch(`http://localhost/escape-desarrollo-backend/public/api/cantons/${selectedCanton}/districts`)
+            fetch(`http://207.246.65.163/api/cantons/${selectedCanton}/districts`)
                 .then((response) => response.json())
                 .then((data) => {
                     setDistricts(data); 
@@ -354,7 +333,7 @@ export function SignUpUsers() {
             <div className="flex justify-center items-center">
 
                 <form className="w-full lg:w-2/4" onSubmit={handleSubmit}>
-                    <img className="w-[15rem] mx-auto mt-8 mb-16" src="../src/assets/imgs/logo-celeste.png" alt="Logo" />
+                    <img className="w-[15rem] mx-auto mt-8 mb-16" src={logo} alt="Logo" />
                     <div className="grid lg:grid-cols-2 gap-4">
                         <div>
                             <AuthInput label={t('iName')} name="name" placeholder={t('iName')} type="text" onChange={e => setName(e.target.value)} className="{nameError ? 'border-red-500' : ''}"/> {nameError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}

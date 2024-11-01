@@ -1,7 +1,6 @@
-"use client";
-import "../../index.css";
+("use client");
 import { Carousel } from "flowbite-react";
-import image from "../../assets/imgs/descarga (4).jpg";
+import image from "../../assets/imgs/a.jpg";
 import monteverde from "../../assets/imgs/monteverde.jpg";
 import arenal from "../../assets/imgs/arenal.jpg";
 import rio from "../../assets/imgs/rio.jpg";
