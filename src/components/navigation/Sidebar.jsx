@@ -1,5 +1,5 @@
 import "../../index.css";
-import logoCeleste from '../../assets/imgs/logo-celeste.png';
+import logoCeleste from '../../assets/imgs/logoCeleste.png';
 import { useFetchSidebar } from  "../hooks/useFetchSidebar.js";
 import propTypes from "prop-types";
 import { useUser } from "../../context/UserContext.jsx";
