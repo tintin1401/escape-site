@@ -1,5 +1,5 @@
 import "../../../index.css";
-import logo from '../../../assets/imgs/logo-celeste.png';
+import logo from '../../../assets/imgs/logoCeleste.png';
 import play from '../../../assets/imgs/Play.svg';
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
