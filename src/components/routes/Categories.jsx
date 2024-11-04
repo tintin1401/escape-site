@@ -26,18 +26,18 @@ export function Categories() {
 
   const { isMobile } = useFetchMenubar();
   const { data: categories, loading: loadingCategories } = useFetchData(
-    "http://207.246.65.163/api/categories",
+    "https://myescape.online/api/categories",
     ["name"]
   );
   const [district, setDistrict] = useState([]);
   const { data: cantons, loading: loadingCantons } = useFetchData(
-    "http://207.246.65.163/api/canton"
+    "https://myescape.online/api/canton"
   );
   const [isOpen, setIsOpen] = useState(false);
   const [isFilter, setIsFilter] = useState(false);
   const [idCategory, setIdCategory] = useState(location.state);
   const { data: subCategories, setData: setSubCategories } = useFetchData(
-    `http://207.246.65.163/api/subcategories/${idCategory}`,
+    `https://myescape.online/api/subcategories/${idCategory}`,
     ["name"]
   );
 
@@ -48,7 +48,7 @@ export function Categories() {
     setIdCategory(0);
   }
   const { data, loading, setData } = useFetchData(
-    `http://207.246.65.163/api/items/${idCategory}/${idCategorySub}/${idCanton}/${idDistrict}/${user.id}`
+    `https://myescape.online/api/items/${idCategory}/${idCategorySub}/${idCanton}/${idDistrict}/${user.id}`
   );
 
   const handleClose = () => setIsOpen(false);
@@ -60,7 +60,7 @@ export function Categories() {
 
   const openCard = async (id) =>  {
     try {
-      const response = await fetch(`http://207.246.65.163/api/company/${id}/` + user.id);
+      const response = await fetch(`https://myescape.online/api/company/${id}/` + user.id);
       const result = await response.json();
       if (result[0].favorite != null) {
         setHearts(true);
@@ -84,7 +84,7 @@ export function Categories() {
   };
   const favorite  = () => {
     console.log("La id de la card es "+id +" y el id del user es "+user.id);
-    fetch("http://207.246.65.163/api/favorite", {
+    fetch("https://myescape.online/api/favorite", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -119,7 +119,7 @@ export function Categories() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://207.246.65.163/api/items/${idCategory}/${idCategorySub}/${idCanton}/${idDistrict}/${user.id}`
+          `https://myescape.online/api/items/${idCategory}/${idCategorySub}/${idCanton}/${idDistrict}/${user.id}`
         );
         const result = await response.json();
         setData(result);
@@ -135,13 +135,13 @@ export function Categories() {
     if (idCategory == id) {
       setIdCategory(0);
       fetchCategory(
-        `http://207.246.65.163/api/subcategories/0`,
+        `https://myescape.online/api/subcategories/0`,
         true
       );
     } else {
       setIdCategory(id);
       fetchCategory(
-        `http://207.246.65.163/api/subcategories/${id}`,
+        `https://myescape.online/api/subcategories/${id}`,
         true
       );
     }
@@ -150,7 +150,7 @@ export function Categories() {
   const setdistrict = (id) => {
     setIdCanton(id);
     fetchCategory(
-      `http://207.246.65.163/api/district/${id}`,
+      `https://myescape.online/api/district/${id}`,
       false
     );
   };

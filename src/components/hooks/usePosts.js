@@ -18,8 +18,8 @@ export const usePosts = (userTypeFilter = null) => {
     const fetchPosts = async () => {
         try {
             const url = userTypeFilter === 1
-                ? 'http://207.246.65.163/api/company-posts'
-                : 'http://207.246.65.163/api/posts';
+                ? 'https://myescape.online/api/company-posts'
+                : 'https://myescape.online/api/posts';
 
             const response = await fetch(url, {
                 method: 'GET',
@@ -30,7 +30,7 @@ export const usePosts = (userTypeFilter = null) => {
             });
 
             if (!response.ok) {
-                const errorText = await response.text(); 
+                const errorText = await response.text();
                 throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
             }
 
@@ -59,7 +59,7 @@ export const usePosts = (userTypeFilter = null) => {
 
     const handleLikePost = async (postId) => {
         try {
-            const response = await fetch(`http://207.246.65.163/api/posts/${postId}/like`, {
+            const response = await fetch(`https://myescape.online/api/posts/${postId}/like`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -73,12 +73,12 @@ export const usePosts = (userTypeFilter = null) => {
 
             const result = await response.json();
 
-        setPosts((prevPosts) =>
-            prevPosts.map((post) =>
-                post.id === postId 
-                    ? { ...post, liked: !post.liked, likes_count: result.likes_count } 
-                    : post
-            )
+            setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                    post.id === postId
+                        ? { ...post, liked: !post.liked, likes_count: result.likes_count }
+                        : post
+                )
 
             );
 
@@ -130,14 +130,15 @@ export const usePosts = (userTypeFilter = null) => {
         }
 
         try {
-            const response = await fetch('http://207.246.65.163/api/create/post', {
+            const response = await fetch('https://myescape.online/api/create/post', {
                 method: 'POST',
                 body: formData,
                 credentials: 'include',
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(JSON.stringify(errorData));
             }
 
             const data = await response.json();
@@ -151,7 +152,9 @@ export const usePosts = (userTypeFilter = null) => {
             fetchPosts();
             navigate(`/home`);
         } catch (error) {
-            console.error('Error creando la publicación:', error);
+            const errorMessages = JSON.parse(error.message);
+            console.error('Error creando la publicación:', errorMessages);
+            alert('Error creando la publicación:\n' + Object.values(errorMessages).flat().join('\n'));
         }
     };
 
@@ -163,7 +166,7 @@ export const usePosts = (userTypeFilter = null) => {
 
         const fetchPostData = async () => {
             try {
-                const response = await fetch(`http://207.246.65.163/api/posts/${id}`);
+                const response = await fetch(`https://myescape.online/api/posts/${id}`);
                 if (!response.ok) {
                     throw new Error('Error al obtener la publicación');
                 }
@@ -173,7 +176,7 @@ export const usePosts = (userTypeFilter = null) => {
 
                 if (data.files) {
                     const filePreviews = data.files.map(file => {
-                        const filePath = `http://207.246.65.163/storage/${file.file_path}`;
+                        const filePath = `https://myescape.online/storage/${file.file_path}`;
 
                         const fileType = file.file_path.split('.').pop().toLowerCase();
                         const type = ['jpg', 'jpeg', 'png', 'gif'].includes(fileType) ? 'image' :
@@ -229,7 +232,7 @@ export const usePosts = (userTypeFilter = null) => {
                 }
             }
 
-            const response = await fetch(`http://207.246.65.163/api/update/post/${id}`, {
+            const response = await fetch(`https://myescape.online/api/update/post/${id}`, {
                 method: 'POST',
                 body: formData,
                 credentials: 'include',
@@ -249,8 +252,13 @@ export const usePosts = (userTypeFilter = null) => {
                     alert('No tiene permisos para actualizar esta publicación.');
                     return;
                 } else {
-                    console.error('Error en la respuesta:', data);
-                    throw new Error('Error al actualizar la publicación');
+                    if (data.error) {
+                        alert('Error en la validación:\n' + Object.values(data.error).flat().join('\n'));
+                        return;
+                    } else {
+                        console.error('Error en la respuesta:', data);
+                        throw new Error('Error al actualizar la publicación');
+                    }
                 }
             }
 
@@ -274,7 +282,7 @@ export const usePosts = (userTypeFilter = null) => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://207.246.65.163/api/delete/post/${id}`, {
+            const response = await fetch(`https://myescape.online/api/delete/post/${id}`, {
                 method: 'DELETE',
                 credentials: 'include',
             });

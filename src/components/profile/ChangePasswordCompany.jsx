@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { InputProfile } from "../inputs/InputProfile";
 import { useUser } from "../../context/UserContext.jsx";
 
@@ -20,7 +20,7 @@ export function ChangePasswordCompany({ close }) {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://207.246.65.163/api/change-password-company', {
+      const response = await fetch('https://myescape.online/api/change-password-company', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

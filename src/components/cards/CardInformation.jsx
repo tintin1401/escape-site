@@ -22,9 +22,6 @@ export function CardInformation({ onClose, favorite, hearts, setHearts, placeDat
   const [travelTime, setTravelTime] = useState(null);
   const [travelMode, setTravelMode] = useState('pedestrian');
   const navigate = useNavigate();
-  const url = `http://localhost/escape-desarrollo-backend/public/api/companies/` + user.id;
-
-
 
   useEffect(() => {
     if (!placeData || !placeData[0] || !user) return;
@@ -33,7 +30,7 @@ export function CardInformation({ onClose, favorite, hearts, setHearts, placeDat
 
     if (place.longitude && place.latitude && user.longitude && user.latitude) {
 
-      /* 
+      
       const origin = [user.longitude, user.latitude];
       const destination = [place.longitude, place.latitude];
   
@@ -47,9 +44,7 @@ export function CardInformation({ onClose, favorite, hearts, setHearts, placeDat
           const travelTimeFormatted = convertirMinutosAHoras(travelTimeInMinutes);
           setTravelTime(travelTimeFormatted);
         })
-        .catch(error => console.error('Error al calcular la ruta:', error));*/
-
-      setTravelTime(t('Calculating'));
+        .catch(error => console.error('Error al calcular la ruta:', error));
     } else {
       setTravelTime(t('Calculating'));
     }

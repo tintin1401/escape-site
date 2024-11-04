@@ -5,7 +5,7 @@ export const translateText = async (text, sourceLang, targetLang) => {
     }
 
     try {
-        const response = await fetch('http://207.246.65.163/api/translate', {
+        const response = await fetch('https://myescape.online/api/translate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

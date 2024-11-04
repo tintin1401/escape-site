@@ -13,6 +13,7 @@ import { useState } from "react";
 import propTypes from "prop-types";
 import { useUser } from '../../context/UserContext.jsx';
 
+import { use } from "i18next";
 import { Posts } from "./Posts.jsx";
 
 import { CardComments } from "../cards/CardComments.jsx";
@@ -49,7 +50,7 @@ export function Home() {
 
   const openCard = async (id) => {
     try {
-      const response = await fetch(`http://207.246.65.163/api/company/${id}/` + user.id);
+      const response = await fetch(`https://myescape.online/api/company/${id}/` + user.id);
       const result = await response.json();
       if (result[0].favorite != null) {
         setHearts(true);
@@ -72,7 +73,7 @@ export function Home() {
     }
   };
   const favorite = () => {
-    fetch("http://207.246.65.163/api/favorite", {
+    fetch("https://myescape.online/api/favorite", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

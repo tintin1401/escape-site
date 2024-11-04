@@ -29,7 +29,7 @@ export function Posts({  setOpenComments, userTypeFilter }) {
             info={post.description}
             category={post.company.category.name}          
             media={Array.isArray(post.files) ? post.files.map(file => ({
-              url: `http://207.246.65.163/storage/${file.file_path}`,
+              url: `https://myescape.online/storage/${file.file_path}`,
               type: file.file_type === 'image' ? 'image' : 'video',
             })) : []}
             likesCount={post.likes_count}
@@ -39,6 +39,7 @@ export function Posts({  setOpenComments, userTypeFilter }) {
             handleLike={handleLikePost}
             liked={post.liked}
             companyId={post.company.id}
+            profilePicture={post.company.image ? `https://myescape.online/imgs/${post.company.image}` : null}
           />
         ))
       ) : (

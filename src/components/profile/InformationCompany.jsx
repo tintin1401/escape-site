@@ -56,10 +56,11 @@ export function InformationCompany() {
     };
 
      const { data, loading } = useFetchData(
-        `http://207.246.65.163/api/company/${idCompany}/` + user.id,
+        `https://myescape.online/api/company/${idCompany}/` + user.id,
          ["name"]   
        );
 
+       console.log(`https://myescape.online/api/company/${idCompany}/` + user.id);
     const [translatedDescription, setTranslatedDescription] = useState(user.description);
     const [translatedCategory, setTranslatedCategory] = useState(getCategoryName(user.category_id));
     

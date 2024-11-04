@@ -1,4 +1,4 @@
-const BASE_URL = 'http://207.246.65.163/api/';
+const BASE_URL = 'https://myescape.online/api';
 
 const fetchConfig = {
     credentials: 'include',

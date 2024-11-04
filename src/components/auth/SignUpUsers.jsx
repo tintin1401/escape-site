@@ -8,6 +8,7 @@ import { useState } from "react";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useEffect } from "react";
+import logo from "../../assets/imgs/logoCeleste.png";
 
 export function SignUpUsers() {
 
@@ -243,15 +244,7 @@ export function SignUpUsers() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log("Nombre:", name);
-        console.log("Email:", email);
-        console.log("Contraseña:", password);
-        console.log("Confirmar Contraseña:", password_confirmation);
-        console.log("Canton:", selectedCanton);
-        console.log("Distrito:", selectedDistrict);
-        console.log("Preferencia 1:", selectedPreferences_1);
-        console.log("Preferencia 2:", selectedPreferences_2);
-        console.log("Preferencia 3:", selectedPreferences_3);
+    
 
         if (!validateFields()) {
             setShowError(true);
@@ -270,9 +263,8 @@ export function SignUpUsers() {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
 
-                console.log(latitude, longitude);
 
-                const response = await fetch('http://207.246.65.163/api/register', {
+                const response = await fetch('http://localhost/escape-desarrollo-backend/public/api/register', {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -309,7 +301,7 @@ export function SignUpUsers() {
             }
         } else {
             try {
-                const response = await fetch('http://207.246.65.163/api/register', {
+                const response = await fetch('http://localhost/escape-desarrollo-backend/public/api/register', {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -354,7 +346,8 @@ export function SignUpUsers() {
             <div className="flex justify-center items-center">
 
                 <form className="w-full lg:w-2/4" onSubmit={handleSubmit}>
-                    <img className="w-[15rem] mx-auto mt-8 mb-16" src="../src/assets/imgs/logo-celeste.png" alt="Logo" />
+                    <img className="w-[15rem] mx-auto mt-8 mb-16" src={logo} alt="Logo" />
+                    <h2 className="text-3xl font-bold text-center mb-8 text-sky-500">Sing Up</h2>
                     <div className="grid lg:grid-cols-2 gap-4">
                         <div>
                             <AuthInput label={t('iName')} name="name" placeholder={t('iName')} type="text" onChange={e => setName(e.target.value)} className="{nameError ? 'border-red-500' : ''}"/> {nameError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}

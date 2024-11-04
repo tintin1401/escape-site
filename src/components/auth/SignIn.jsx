@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useUser } from "../../context/UserContext.jsx";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-
+import logo from "../../assets/imgs/logoCeleste.png";
 
 export function SignIn() {
     const { t } = useTranslation();
@@ -53,7 +53,7 @@ export function SignIn() {
 
         setShowError(false);
 
-        const response = await fetch('http://207.246.65.163/api/login', {
+        const response = await fetch('https://myescape.online/api/login', {
             method: 'POST',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'},
@@ -87,8 +87,8 @@ export function SignIn() {
         <div className="grid justify-center items-center h-[100vh] md:grid-cols-2 gap-4">
         <div className="flex justify-center items-center">
             <form className="w-full lg:w-2/4 " onSubmit={handleSubmit}>
-                <img className="w-[15rem] mx-auto mt-8 mb-16 " src="../src/assets/imgs/logo-celeste.png" alt="Logo" />
-
+                <img className="w-[15rem] mx-auto mt-8 mb-16 " src={logo} alt="Logo" />
+                <h2 className="text-3xl font-bold text-center mb-8 text-sky-500">Sing In</h2>
                 <AuthInput name="email" placeholder={t('iEmail')} type="email" onChange={e => setEmail(e.target.value)} className="{emailError ? 'border-red-500' : ''}"/> {emailError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
                 <AuthInput name="password" placeholder={t('iPassword')} type="password" onChange={e => setPassword(e.target.value)} className="{passwordError ? 'border-red-500' : ''}"/> {passwordError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
                 <div className="text-right">

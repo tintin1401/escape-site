@@ -9,8 +9,9 @@ import { useState, useEffect } from "react";
 import Modal from '@mui/material/Modal';
 import { ChangePasswordCompany } from './ChangePasswordCompany.jsx';
 import { useProfile } from '../hooks/useProfile.js';
-import {  useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Selected } from "../selected/Selected";
+import { Description } from "@headlessui/react";
 
 export function AccountSettingsCompany({ toggleDarkMode }) {
 
@@ -83,7 +84,7 @@ export function AccountSettingsCompany({ toggleDarkMode }) {
 
     useEffect(() => {
         const fetchCantones = async () => {
-            const response = await fetch('http://207.246.65.163/api/cantons');
+            const response = await fetch('https://myescape.online/api/cantons');
             const data = await response.json();
             console.log("Cantones cargados:", data);
             setCantones(data);
@@ -95,7 +96,7 @@ export function AccountSettingsCompany({ toggleDarkMode }) {
     useEffect(() => {
         if (formData.canton) {
             const fetchDistritos = async () => {
-                const response = await fetch(`http://207.246.65.163/api/cantons/${formData.canton}/districts`);
+                const response = await fetch(`https://myescape.online/api/cantons/${formData.canton}/districts`);
                 const data = await response.json();
                 setDistritos(data);
             };
@@ -131,7 +132,7 @@ export function AccountSettingsCompany({ toggleDarkMode }) {
         }
 
         try {
-            const response = await fetch('http://207.246.65.163/api/update-company', {
+            const response = await fetch('https://myescape.online/api/update-company', {
                 method: 'POST',
                 //headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -185,7 +186,7 @@ export function AccountSettingsCompany({ toggleDarkMode }) {
                         {console.log("user:", user)}
                         {console.log("user.image:", user?.image)}
                         <img
-                            src={user && user.image ? `http://207.246.65.163/storage/images/${user.image}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"} 
+                            src={user && user.image ? `https://myescape.online/imgs/${user.image}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"} 
                             alt="Profile_Img" 
                             className="rounded-full h-[7rem] w-[7rem] mt-[2rem]"
                         />

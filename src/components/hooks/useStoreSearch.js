@@ -6,12 +6,13 @@ export const useStoreSearch = () => {
 
     const storeSearchTerm = async (search_term) => {
         try {
-            const response = await fetch('http://207.246.65.163/api/search/store', {
+            const response = await fetch('https://myescape.online/api/search/store', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ search_term }),
+                credentials: 'include',
             });
             const responseData = await response.json();
             console.log(responseData);

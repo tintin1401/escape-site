@@ -97,7 +97,7 @@ export function HeaderLanding() {
                     </div>
                 </div>
                 <h1 className="text-5xl md:text-8xl font-bold lg:w-[18ch] mt-20 mb-16 md:mb-28">{t('headerTitle')}</h1>
-                <NavLink className="text-white text-3xl font-bold bg-[#132443] bg-opacity-10 px-6 py-4 rounded-full " to="/signUpUser">{t('headerBtn')} <img className="inline-block" src={play} alt="arrow" /></NavLink>
+                
                 <h2 className="text-white md:text-7xl text-5xl font-bold md:m-20 mt-8 grid justify-end ">100+ <span className="md:text-3xl text-xl md:ml-4 ml-2 mb-8">{t('activities')}</span></h2>
             </div>
         </header>

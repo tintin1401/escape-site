@@ -7,7 +7,13 @@ export const useFetchSearchHistory = () => {
   const fetchSearchHistory = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://207.246.65.163/api/searches/recent');
+      const response = await fetch('https://myescape.online/api/searches/recent',{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
       const data = await response.json();
       setRecentSearches(data);
     } catch (error) {
@@ -20,7 +26,7 @@ export const useFetchSearchHistory = () => {
 
   const handleDeleteSearch = async (searchId) => {
     try {
-      const response = await fetch(`http://207.246.65.163/api/search/destroy/${searchId}`, {
+      const response = await fetch(`https://myescape.online/api/search/destroy/${searchId}`, {
         method: 'DELETE',
       });
 

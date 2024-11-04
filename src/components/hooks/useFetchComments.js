@@ -16,7 +16,7 @@ export const useFetchComments = () => {
     }
 
     try {
-      const response = await fetch(`http://207.246.65.163/api/posts/${postId}/comments`);
+      const response = await fetch(`https://myescape.online/api/posts/${postId}/comments`);
       if (!response.ok) {
         console.error(`Error: ${response.status} - ${response.statusText}`);
         return;
@@ -42,7 +42,7 @@ export const useFetchComments = () => {
   const submitComment = async (postId, comment) => {
     console.log(user);
     try {
-      const response = await fetch('http://207.246.65.163/api/create/comment', {
+      const response = await fetch('https://myescape.online/api/create/comment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ daily_post_id: postId, comment }),
@@ -62,7 +62,7 @@ export const useFetchComments = () => {
 
   const updateComment = async (commentId, updatedComment) => {
     try {
-      const response = await fetch(`http://207.246.65.163/api/update/comment/${commentId}`, {
+      const response = await fetch(`https://myescape.online/api/update/comment/${commentId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ comment: updatedComment }),
@@ -84,7 +84,7 @@ export const useFetchComments = () => {
 
   const deleteComment = async (commentId) => {
     try {
-      const response = await fetch(`http://207.246.65.163/api/delete/comment/${commentId}`, {
+      const response = await fetch(`https://myescape.online/api/delete/comment/${commentId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -102,7 +102,7 @@ export const useFetchComments = () => {
 
   const getCommentCount = async (postId) => {
     try {
-      const response = await fetch(`http://207.246.65.163/api/count/comments/${postId}`, {
+      const response = await fetch(`https://myescape.online/api/count/comments/${postId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

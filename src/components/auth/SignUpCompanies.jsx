@@ -9,6 +9,7 @@ import useFetchData from "../hooks/useFetchData.js";
 
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import logo from "../../assets/imgs/logoCeleste.png";
 
 export function SignUpCompanies() {
     const { t } = useTranslation();
@@ -88,14 +89,14 @@ export function SignUpCompanies() {
 
  
     const { data: category_id, loading: loadingCategories } = useFetchData(
-        "http://207.246.65.163/api/categories",
+        "https://myescape.online/api/categories",
         ["name"]
       );
 
     useEffect(() => {
         if (selectedCanton) {
             
-            fetch(`http://207.246.65.163/api/cantons/${selectedCanton}/districts`)
+            fetch(`https://myescape.online/api/cantons/${selectedCanton}/districts`)
                 .then((response) => response.json())
                 .then((data) => {
                     setDistricts(data); 
@@ -204,18 +205,6 @@ export function SignUpCompanies() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log("Nombre:", name);
-        console.log("Phone number:", phone_number);
-        console.log("Category:", category_id);
-        console.log("Sub_categories:", sub_categories_id)
-        console.log("Email:", email);
-        console.log("Description:", description);
-        console.log("Canton:", selectedCanton);
-        console.log("Distrito:", selectedDistrict);
-        console.log("Address", address);
-        console.log("Contraseña:", password);
-        console.log("Confirmar Contraseña:", password_confirmation);
-
         if (!validateFields()) {
             setShowError(true);
             setShowSuccess(false);
@@ -230,12 +219,11 @@ export function SignUpCompanies() {
                     navigator.geolocation.getCurrentPosition(resolve, reject);
                 });
 
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
+                
 
                 console.log(latitude, longitude);
 
-                const response = await fetch('http://207.246.65.163/api/company-register', {
+                const response = await fetch('https://myescape.online/api/company-register', {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -275,7 +263,7 @@ export function SignUpCompanies() {
             }
         } else {
             try {
-                const response = await fetch('public/api/http://207.246.65.163/api/company-register', {
+                const response = await fetch('https://myescape.online/api/company-register', {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -323,7 +311,8 @@ export function SignUpCompanies() {
             <div className="flex justify-center items-center">
 
                 <form className="ww-full lg:w-2/4" onSubmit={handleSubmit}>
-                    <img className="w-[15rem] mx-auto mt-8 mb-16 " src="../src/assets/imgs/logo-celeste.png" alt="Logo" />
+                    <img className="w-[15rem] mx-auto mt-8 mb-16 " src={logo} alt="Logo" />
+                    <h2 className="text-3xl font-bold text-center mb-8 text-sky-500">Sing Up</h2>
                     <div className="grid lg:grid-cols-2 gap-4">
                         <div>
                             <AuthInput label={t('iCompanyName')} name="name" placeholder={t('iCompanyName')} type="text" onChange={e => setName(e.target.value)} className="{nameError ? 'border-red-500' : ''}"/> {nameError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
