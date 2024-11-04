@@ -14,6 +14,7 @@ export const usePosts = (userTypeFilter = null) => {
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
     const { i18n } = useTranslation();
+    const { user } = useUser();
 
     const fetchPosts = async () => {
         try {
@@ -129,6 +130,8 @@ export const usePosts = (userTypeFilter = null) => {
             }
         }
 
+        formData.append('company_id', user.id);
+
         try {
             const response = await fetch('https://myescape.online/api/create/post', {
                 method: 'POST',
@@ -207,6 +210,7 @@ export const usePosts = (userTypeFilter = null) => {
         try {
             const formData = new FormData();
             formData.append('description', description);
+            formData.append('company_id', user.id);
 
             let filesChanged = false;
 
@@ -311,7 +315,6 @@ export const usePosts = (userTypeFilter = null) => {
     useEffect(() => {
         fetchPosts();
     }, []);
-
 
     return {
         posts,
