@@ -15,10 +15,10 @@ export function SignInCompanies() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const { user, setUser } = useUser();
+    const { setUser } = useUser();
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [ setErrorMessage] = useState('');
 
     const validateFields = () => {
         if (!email || !password) {
@@ -73,8 +73,8 @@ export function SignInCompanies() {
         <div className="grid justify-center items-center h-[100vh] md:grid-cols-2 gap-4">
         <div className="flex justify-center items-center">
             <form className="w-full lg:w-2/4 " onSubmit={handleSubmit}>
-                <img className="w-[15rem] mx-auto mt-8 mb-16 " src={logo} alt="Logo" />
-                <h2 className="text-3xl font-bold text-center mb-8 text-sky-500">Sing In</h2>
+                <img className="w-[12rem] mx-auto mt-8 mb-12 " src={logo} alt="Logo" />
+                <h2 className="text-4xl font-bold text-center mb-8 text-sky-500">{t('login')}</h2>
                 <AuthInput name="email" placeholder={t('iEmail')} type="email" onChange={e => setEmail(e.target.value)}/>
                 <AuthInput name="password" placeholder={t('iPassword')} type="password" className="mb-4 lg:mb-4" onChange={e => setPassword(e.target.value)}/>
                 <div className="text-right">
@@ -88,7 +88,7 @@ export function SignInCompanies() {
                     value={t('iSignIn')}
                 />
 
-                <p className="text-gray-400 text-center">{t('goSignUp')}
+                <p className="text-gray-400 text-center dark:text-white">{t('goSignUp')}
                     <NavLink className="text-sky-500 ml-2 font-medium" to="/signUpCompanies">{t('createAccount')}</NavLink>
                 </p>
             </form> 

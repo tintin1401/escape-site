@@ -5,10 +5,13 @@ import useFetchData from "../hooks/useFetchData";
 import { MapCard } from "../cards/MapCard.jsx";
 import { Navigation } from "../navigation/Navigation";
 import { useLocation } from 'react-router-dom';
+import { useDarkModeContext } from "../../context/AppContext.jsx";
+import tt from '@tomtom-international/web-sdk-maps';
 
 
 export const RouteMap = () => {
 
+  
   const { user } = useUser();
   let url = `https://myescape.online/api/companies/`+user.id;
   const location = useLocation();
@@ -21,6 +24,10 @@ export const RouteMap = () => {
   const { data } = useFetchData(url);
   const [inputValue, setInputValue] = useState('');
   const [travelMode, setTravelMode] = useState('pedestrian');
+
+  const { darkMode } = useDarkModeContext(); // Accede al estado del modo oscuro
+  const mapContainer = React.useRef(null); // Referencia al contenedor del mapa
+  let map;
 
   console.log(data);
 
@@ -45,9 +52,13 @@ export const RouteMap = () => {
   }, [placeId]);
 
   useEffect(() => {
-    const map = tt.map({
+    if (mapContainer.current) {
+      map = tt.map({
       key: 'dd8qO1N1bSR7yu4ShWlBi4HDup4MKSwi',
-      container: 'map',
+      container: mapContainer.current,
+      style: darkMode
+      ? 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBASFZaaHBtUFdrS3QyR3E5bzthZjVkMTI5Yy0wNzdhLTQyODktYTIwYy05NGI4MDFkNDZlOGE=/drafts/0.json?key=dd8qO1N1bSR7yu4ShWlBi4HDup4MKSwi' // Estilo oscuro
+      : 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBASFZaaHBtUFdrS3QyR3E5bzs3YTdiYzkwNi03ZTFhLTQwOWMtYjM5ZS1lODcxYmY1MzliMDI=/drafts/0.json?key=dd8qO1N1bSR7yu4ShWlBi4HDup4MKSwi', // Estilo claro
       center: origin,
       zoom: 15
     });
@@ -132,14 +143,16 @@ export const RouteMap = () => {
       //const segundosLlegada = horaDeLlegada.getSeconds().toString().padStart(2, '0');
 
       //return `${horasLlegada}:${minutosLlegada}:${segundosLlegada}`;
-      return `${horasLlegada}:${minutosLlegada}`;
+      return `${horasLlegada}h ${minutosLlegada}min`;
     }
 
 
     return () => {
       map.remove();
     };
-  }, [origin, destination, travelMode]);
+
+  }
+}, [origin, destination, travelMode, darkMode]);
 
   const handleDestinationInput = (e) => {
     const query = e.target.value.toLowerCase();
@@ -179,8 +192,9 @@ export const RouteMap = () => {
         placeId={placeId}
       />
 
-      <div id="map" className="relative w-full h-screen z-8"></div>
+    <div ref={mapContainer} className="relative w-full h-screen z-8"></div>
     </div>
   );
+
 
 };

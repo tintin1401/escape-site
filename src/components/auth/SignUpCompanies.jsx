@@ -13,7 +13,7 @@ import logo from "../../assets/imgs/logoCeleste.png";
 
 export function SignUpCompanies() {
     const { t } = useTranslation();
-
+    const [step, setStep] = useState(1)
     const [isTooltipVisible, setTooltipVisible] = useState(false);
 
     const handleTooltipToggle = () => {
@@ -89,8 +89,7 @@ export function SignUpCompanies() {
 
  
     const { data: category_id, loading: loadingCategories } = useFetchData(
-        "https://myescape.online/api/categories",
-        ["name"]
+        "https://myescape.online/api/categories"
       );
 
     useEffect(() => {
@@ -107,100 +106,110 @@ export function SignUpCompanies() {
         }
     }, [selectedCanton]);
 
-    const validateFields = () => {
+    const validateFields = (step) => {
         let isValid = true;
     
-        if (!name) {
-            setNameError(true);
-            isValid = false;
-        } else {
-            setNameError(false);
-        }
-    
-        if (!email) {
-            setEmailError(true);
-            isValid = false;
-        } else {
-            setEmailError(false);
-        }
-
-        if (!phone_number) {
-            setPhone_numberError(true);
-            isValid = false;
-        } else {
-            if (phone_number.length !=8) {
-                setPhone_numberError(true);
+        if(step === 1){
+            if (!name) {
+                setNameError(true);
                 isValid = false;
-            }else{
-                setPhone_numberError(false);
+            } else {
+                setNameError(false);
+            }
+        
+            if (!email) {
+                setEmailError(true);
+                isValid = false;
+            } else {
+                setEmailError(false);
+            }
+
+            if (!password) {
+                setPasswordError(true);
+                isValid = false;
+            } else {
+                setPasswordError(false);
+            }
+        
+            if (password !== password_confirmation) {
+                setPasswordConfirmationError(true);
+                isValid = false;
+            } else {
+                setPasswordConfirmationError(false);
             }
         }
 
-        if (!description) {
-            setDescriptionError(true);
-            isValid = false;
-        } else {
-            setDescriptionError(false);
+        if(step === 2){
+            if (!description) {
+                setDescriptionError(true);
+                isValid = false;
+            } else {
+                setDescriptionError(false);
+            }
+
+            if (!phone_number) {
+                setPhone_numberError(true);
+                isValid = false;
+            } else {
+                if (phone_number.length !=8) {
+                    setPhone_numberError(true);
+                    isValid = false;
+                }else{
+                    setPhone_numberError(false);
+                }
+            }
+
+            if (!selectedCategory) {
+                setCategoryError(true);
+                isValid = false;
+            } else {
+                setCategoryError(false);
+            }
+    
+            if (!selectedSub_categories) {
+                setSub_categoriesError(true);
+                isValid = false;
+            } else {
+                setSub_categoriesError(false);
+            }
         }
 
-        if (!address) {
-            setAddressError(true);
-            isValid = false;
-        } else {
-            setAddressError(false);
-        }
-    
-        if (!password) {
-            setPasswordError(true);
-            isValid = false;
-        } else {
-            setPasswordError(false);
-        }
-    
-        if (password !== password_confirmation) {
-            setPasswordConfirmationError(true);
-            isValid = false;
-        } else {
-            setPasswordConfirmationError(false);
-        }
-    
-        if (!selectedCanton) {
-            setCantonError(true);
-            isValid = false;
-        } else {
-            setCantonError(false);
-        }
-    
-        if (!selectedDistrict) {
-            setDistrictError(true);
-            isValid = false;
-        } else {
-            setDistrictError(false);
-        }
-    
-        if (!email) {
-            setEmailError(true);
-            isValid = false;
-        } else {
-            setEmailError(false);
-        }
+        if(step === 3){
+            if (!selectedCanton) {
+                setCantonError(true);
+                isValid = false;
+            } else {
+                setCantonError(false);
+            }
+        
+            if (!selectedDistrict) {
+                setDistrictError(true);
+                isValid = false;
+            } else {
+                setDistrictError(false);
+            }
 
-        if (!selectedCategory) {
-            setCategoryError(true);
-            isValid = false;
-        } else {
-            setCategoryError(false);
+            if (!address) {
+                setAddressError(true);
+                isValid = false;
+            } else {
+                setAddressError(false);
+            }
         }
-
-        if (!selectedSub_categories) {
-            setSub_categoriesError(true);
-            isValid = false;
-        } else {
-            setSub_categoriesError(false);
-        }
-    
         return isValid;
     }
+
+    const handleNextStep = () => {
+        if (validateFields(step)) {
+            setStep(step + 1);
+        }
+    };
+
+    const handlePreviousStep = () => {
+        if (step > 1) {
+            setStep(step - 1);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -219,11 +228,12 @@ export function SignUpCompanies() {
                     navigator.geolocation.getCurrentPosition(resolve, reject);
                 });
 
-                
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
 
                 console.log(latitude, longitude);
 
-                const response = await fetch('https://myescape.online/api/company-register', {
+                const response = await fetch('`https://myescape.online/api/company-register', {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -310,96 +320,139 @@ export function SignUpCompanies() {
 
             <div className="flex justify-center items-center">
 
-                <form className="ww-full lg:w-2/4" onSubmit={handleSubmit}>
-                    <img className="w-[15rem] mx-auto mt-8 mb-16 " src={logo} alt="Logo" />
-                    <h2 className="text-3xl font-bold text-center mb-8 text-sky-500">Sing Up</h2>
-                    <div className="grid lg:grid-cols-2 gap-4">
-                        <div>
-                            <AuthInput label={t('iCompanyName')} name="name" placeholder={t('iCompanyName')} type="text" onChange={e => setName(e.target.value)} className="{nameError ? 'border-red-500' : ''}"/> {nameError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                            <AuthInput label={t('iPhone')} name="phone_number" placeholder="12345678" type="tel" onChange={e => setPhone_number(e.target.value)} className="{phone_numberError ? 'border-red-500' : ''}"/> {phone_numberError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio y tiene que tener 8 digitos</p>}
-                            <AuthInput label={t('iEmail')} name="email" placeholder={t('iEmail')} type="email" onChange={e => setEmail(e.target.value)} className="{emailError ? 'border-red-500' : ''}"/> {emailError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                            <AuthInput label={t('Description')} name="description" placeholder={t('Description')} type="text" onChange={e => setDescription(e.target.value)} className="{descriptionError ? 'border-red-500' : ''}"/> {descriptionError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                            <AuthInput label={t('iPassword')} name="password" placeholder={t('iPassword')} type="password" onChange={e => setPassword(e.target.value)} className="{passwordError ? 'border-red-500' : ''}"/> {passwordError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                            <AuthInput label={t('iConfirmPassword')} name="passwordConfirm" placeholder={t('iConfirmPassword')} type="password" onChange={e => setPassword_confirmation(e.target.value)} className="{passwordConfirmationError ? 'border-red-500' : ''}"/> {passwordConfirmationError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                        </div>
-                        <div>
-                            {loadingCategories ? <p>Cargando categorías...</p> : (
-                                 <Selected
-                                 label={t('Category')}
-                                 options={category_id.map(district => ({ id: district.id, name: district.name }))}
-                                 placeholder={t('Category')}
-                                 onChange={e => setSelectedCategory(e.target.value)}
-                                 className={categoryError ? 'border-red-500' : ''}
-                             />
-                            )}
-                           
-                            {categoryError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una categoria</p>}
+                <form className="w-full lg:w-2/4" onSubmit={handleSubmit}>
+                    <img className="w-[12rem] mx-auto mt-8 mb-9 " src={logo} alt="Logo" /> 
+                    <h2 className="text-4xl font-bold text-center text-sky-500">{t('signup')}</h2>
+                    <div className="grid gap-4 mt-8">
+                        {step === 1 && (
+                            <div>
+                                <AuthInput label={t('iCompanyName')} name="name" placeholder={t('iCompanyName')} type="text" onChange={e => setName(e.target.value)} className="{nameError ? 'border-red-500' : ''}"/> {nameError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                                <AuthInput label={t('iEmail')} name="email" placeholder={t('iEmail')} type="email" onChange={e => setEmail(e.target.value)} className="{emailError ? 'border-red-500' : ''}"/> {emailError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                                <AuthInput label={t('iPassword')} name="password" placeholder={t('iPassword')} type="password" onChange={e => setPassword(e.target.value)} className="{passwordError ? 'border-red-500' : ''}"/> {passwordError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                                <AuthInput label={t('iConfirmPassword')} name="passwordConfirm" placeholder={t('iConfirmPassword')} type="password" onChange={e => setPassword_confirmation(e.target.value)} className="{passwordConfirmationError ? 'border-red-500' : ''}"/> {passwordConfirmationError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                            </div>
+                        )}
 
-                            <Selected
-                                label={t('Subcategories')}
-                                options={sub_categories_id}
-                                placeholder={t('Subcategories')}
-                                onChange={e => setSelectedSub_categories(e.target.value)}
-                                className={sub_CategoriesError ? 'border-red-500' : ''}
-                            />
-                            {sub_CategoriesError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una subcategoria</p>}
+                        {step === 2 && (
+                            <div>
+                                <AuthInput label={t('Description')} name="description" placeholder={t('Description')} type="text" onChange={e => setDescription(e.target.value)} className="{descriptionError ? 'border-red-500' : ''}"/> {descriptionError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                                <AuthInput label={t('iPhone')} name="phone_number" placeholder="12345678" type="tel" onChange={e => setPhone_number(e.target.value)} className="{phone_numberError ? 'border-red-500' : ''}"/> {phone_numberError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio y tiene que tener 8 digitos</p>}
+                                {loadingCategories ? <p>Cargando categorías...</p> : (
+                                    <Selected
+                                    label={t('iCategory')}
+                                    options={category_id.map(district => ({ id: district.id, name: district.name }))}
+                                    placeholder={t('iCategory')}
+                                    onChange={e => setSelectedCategory(e.target.value)}
+                                    className={categoryError ? 'border-red-500' : ''}
+                                    cBorder="border-none outline-none"
+                                />
+                                )}
+                            
+                                {categoryError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una categoria</p>}
 
-                            <Selected
-                                label={t('Canton')}
-                                options={canton_id}
-                                placeholder={t('Canton')}
-                                onChange={e => setSelectedCanton(e.target.value)}
-                                className={cantonError ? 'border-red-500' : ''}
-                            />
-                            {cantonError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona un canton</p>}
+                                <Selected
+                                    label={t('SubCategory')}
+                                    options={sub_categories_id}
+                                    placeholder={t('SubCategory')}
+                                    onChange={e => setSelectedSub_categories(e.target.value)}
+                                    className={sub_CategoriesError ? 'border-red-500' : ''}
+                                    cBorder="border-none outline-none"
+                                />
+                                {sub_CategoriesError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una subcategoria</p>}
 
-                            <Selected
-                                label={t('District')}
-                                options={districts.map(district => ({ id: district.id, name: district.name }))}
-                                placeholder={t('District')}
-                                onChange={e => setSelectedDistrict(e.target.value)}
-                                className={districtError ? 'border-red-500' : ''}
-                            />
-                            {districtError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona un distrito</p>}
+                            </div>
+                        )}
+
+                        {step === 3 && (
+                            <div>
+                                <Selected
+                                    label={t('Canton')}
+                                    options={canton_id}
+                                    placeholder={t('Canton')}
+                                    onChange={e => setSelectedCanton(e.target.value)}
+                                    className={cantonError ? 'border-red-500' : ''}
+                                    cBorder="border-none outline-none"
+                                />
+                                {cantonError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona un canton</p>}
+
+                                <Selected
+                                    label={t('District')}
+                                    options={districts.map(district => ({ id: district.id, name: district.name }))}
+                                    placeholder={t('District')}
+                                    onChange={e => setSelectedDistrict(e.target.value)}
+                                    className={districtError ? 'border-red-500' : ''}
+                                    cBorder="border-none outline-none"
+                                />
+                                {districtError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona un distrito</p>}
 
 
-                            <AuthInput label={t('Address')} name="address" placeholder={t('Address')} type="text" onChange={e => setAddress(e.target.value)} className="{addressError ? 'border-red-500' : ''}"/> {addressError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                                <AuthInput label={t('address')} name="address" placeholder={t('address')} type="text" onChange={e => setAddress(e.target.value)} className="{addressError ? 'border-red-500' : ''}"/> {addressError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
 
-                            <div className="flex items-center relative lg:mt-[3rem] mt-[1rem]">
-                                <input className="shadow-md p-3 rounded-lg border-none" type="checkbox" id="share-location" name="shareLocation" />
-                                <label htmlFor="share-location" className="ml-4 text-sky-500 font-medium">{t('ShareLocation')}</label>
-                                <div className="ml-2 relative">
-                                    <svg onClick={handleTooltipToggle} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 stroke-gray-400 cursor-pointer">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                                    </svg>
+                                <div className="flex items-center relative mt-[1rem] mb-2">
+                                    <input className="shadow-md p-3 rounded-lg border-none" type="checkbox" id="share-location" name="shareLocation" />
+                                    <label htmlFor="share-location" className="ml-4 text-sky-500 font-medium">{t('ShareLocation')}</label>
+                                    <div className="ml-2 relative">
+                                        <svg onClick={handleTooltipToggle} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 stroke-gray-400 cursor-pointer">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                                        </svg>
 
-                                    {/* Tooltip */}
-                                    {isTooltipVisible && (
-                                        <div className="absolute left-0 top-10 z-10 w-48 bg-white shadow-lg p-3 rounded-lg text-sm text-gray-700">
-                                            <p>{t('ShareLocationInfo')}</p>
-                                            <button
-                                                className="text-sky-500 mt-2"
-                                                onClick={handleTooltipToggle}
-                                            >
-                                                {t('GotIt')}
-                                            </button>
-                                        </div>
-                                    )}
+                                        {/* Tooltip */}
+                                        {isTooltipVisible && (
+                                            <div className="absolute left-0 top-10 z-10 w-48 bg-white shadow-lg p-3 rounded-lg text-sm text-gray-700">
+                                                <p>{t('ShareLocationInfo')}</p>
+                                                <button
+                                                    className="text-sky-500 mt-2"
+                                                    onClick={handleTooltipToggle}
+                                                >
+                                                    {t('GotIt')}
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
+                    </div>
+                    
+                    <div
+                        className={`flex lg:my-4 my-10 ${step === 3 ? 'flex-col gap-4' : 'justify-between gap-4'}`}
+                    >
+                        {step > 1 && (
+                            <button
+                                type="button"
+                                onClick={handlePreviousStep}
+                                className="text-sky-500 p-3 hover:bg-sky-500 border-2 border-sky-500 flex rounded-xl items-center justify-center w-full font-bold text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:text-white"
+                            >
+                                {t('back')}
+                            </button>
+                        )}
+                        {step < 3 ? (
+                            <button
+                                type="button"
+                                onClick={handleNextStep}
+                                className="text-sky-500 p-3 hover:bg-sky-500 border-2 border-sky-500 flex rounded-xl items-center justify-center w-full font-bold text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:text-white"
+                            >
+                                {t('next')}
+                            </button>
+                        ) : (
+                            <div className="w-full">
+                                <input
+                                    className="text-white p-3 bg-sky-500 flex rounded-xl items-center justify-center w-full font-bold text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:bg-blue-800 hover:text-white"
+                                    type="submit"
+                                    name="btn-signup"
+                                    value={t('signup')}
+                                />
+                                <p className="text-gray-400 text-center mt-4 dark:text-white">
+                                    {t('goSignIn')}
+                                    <NavLink className="text-sky-500 ml-2 font-medium" to="/signInCompanies">
+                                        {t('iSignIn')}
+                                    </NavLink>
+                                </p>
+                            </div>
+                        )}
                     </div>
 
-                    <input
-                        className="text-white p-3 bg-sky-500 flex rounded-xl items-center justify-center w-full lg:my-8 my-10 font-bold text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:bg-blue-800 hover:text-white"
-                        type="submit"
-                        name="btn-signup"
-                        value={t('signup')}
-                    />
-
-                    <p className="text-gray-400 text-center">{t('goSignIn')}
-                        <NavLink className="text-sky-500 ml-2 font-medium" to="/signInCompanies">{t('iSignIn')}</NavLink>
-                    </p>
+                    
                 </form>
 
 

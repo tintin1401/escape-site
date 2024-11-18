@@ -2,13 +2,13 @@ import { PostCard } from '../cards/PostCard';
 import { usePosts } from '../hooks/usePosts';
 import { useDarkModeContext } from "../../context/AppContext.jsx";
 
-export function Posts({  setOpenComments, userTypeFilter }) {
+export function Posts({  setOpenComments, userTypeFilter,company_id }) {
   const {
     posts,
     error,
     handleDeletePost,
     handleLikePost
-  } = usePosts( userTypeFilter);
+  } = usePosts( userTypeFilter, company_id);
   const { darkMode } = useDarkModeContext();
 
   const handleDelete = (id) => {

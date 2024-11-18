@@ -12,8 +12,6 @@ import { Drawer } from "flowbite-react";
 import { useState } from "react";
 import propTypes from "prop-types";
 import { useUser } from '../../context/UserContext.jsx';
-
-import { use } from "i18next";
 import { Posts } from "./Posts.jsx";
 
 import { CardComments } from "../cards/CardComments.jsx";

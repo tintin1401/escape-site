@@ -12,27 +12,34 @@ export function LanguageSwitcher() {
 
     return (
         <>
-
-            <Menu as="div" className="relative items-center">
+            <Menu as="div" className="relative">
                 <div>
-                    <MenuButton className="flex w-full justify-center bg-none border-none text-white md:text-xl text-xs">
-                    {t('language')}
+                    <MenuButton className="flex justify-center items-center bg-none border-none text-white text-xl cursor-pointer">
+                        {t('language')}
                     </MenuButton>
                 </div>
 
                 <MenuItems
                     transition
-                    className="absolute right-[-2rem] bg-[#132443] bg-opacity-10 rounded-b-2xl mt-5 z-10 transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                    className="lg:absolute right-0 lg:right-[-2rem] mt-2 lg:mt-5 lg:bg-[#132443] lg:bg-opacity-10 lg:rounded-b-2xl rounded-lg lg:shadow-lg z-10 
+                    transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 
+                    data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
-                    <div className="py-2 px-8 rounded-md">
-                        <MenuItem>
-                            <button className="block text-white md:text-xl text-xs" onClick={() => changeLanguage('en')}>
-                            {t('English')}
+                    <div >
+                        <MenuItem> 
+                            <button
+                                className="block w-full text-left text-white text-base hover:bg-gray-200 hover:text-[#132443] py-2 lg:px-8 px-4"
+                                onClick={() => changeLanguage('en')}
+                            >
+                                {t('English')}
                             </button>
                         </MenuItem>
                         <MenuItem>
-                            <button className="block py-2 text-white md:text-xl text-xs" onClick={() => changeLanguage('es')}>
-                            {t('Spanish')}
+                            <button
+                                className="block w-full text-left text-white text-base hover:bg-gray-200 hover:text-[#132443] py-2 lg:px-8 px-4"
+                                onClick={() => changeLanguage('es')}
+                            >
+                                {t('Spanish')}
                             </button>
                         </MenuItem>
                     </div>

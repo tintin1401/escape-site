@@ -1,7 +1,9 @@
 import "../../index.css";
 import { FooterLink } from "./FooterLink";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import logo from "../../assets/imgs/logoCeleste.png";
+
 export function Footer(){
     const { t } = useTranslation();
     return(
@@ -13,10 +15,9 @@ export function Footer(){
                 </section>
 
                 <div className="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(75px,_1fr))] lg:text-right text-center mt-2">
-                    <FooterLink link={t('home')}/>
-                    <FooterLink link={t('about')}/>
-                    <FooterLink link={t('contact')}/>
-                    <FooterLink link={t('terms')}/>
+                    <FooterLink link={t('about')} to="/about"/>
+                    <FooterLink link={t('contact')} to="/contact"/>
+                    <FooterLink link={t('terms')} to="/terms"/>
                 </div>
             </div>
 

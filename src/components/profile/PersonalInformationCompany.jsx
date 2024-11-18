@@ -98,7 +98,7 @@ export function PersonalInformationCompany() {
 
                 <div className="grid grid-cols-1 items-center lg:grid-cols-2 dark:bg-[#2a2a2a]">
                     <div>
-                    <img src={user && user.image ? `https://myescape.online/imgs/${user.image}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"} alt="Profile_Img" className="rounded-full h-[7rem] w-[7rem] mt-[2rem]" />
+                    <img src={user && user.image ? `https://localhost/escape-desarrollo-backend/public/imgs/${user.image}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"} alt="Profile_Img" className="rounded-full h-[7rem] w-[7rem] mt-[2rem]" />
                         <h3 className="font-bold lg:text-2xl text-xl mt-[2rem] dark:text-white">{user.name}</h3>
                         <h4 className=" text-[#606060] font-semibold  pt-[1rem] lg:hidden">{translatedCategory}</h4>
                         <div className="col-span-3 text-left lg:pt-[2rem] pt-[1rem] dark:text-white">
@@ -115,18 +115,18 @@ export function PersonalInformationCompany() {
 
                         <div className="hidden lg:block">
                             <button className="bg-[#E0E1E3] font-semibold rounded-xl px-[4rem] py-[0.5rem] mt-[1rem] lg:mt-[0rem] dark:text-white dark:bg-[#404040]"><NavLink to="/accountSettingsCompany">{t('Edit')}</NavLink></button>
-                            <p className="pt-[2rem] dark:text-white">1</p>
+                            <p className="pt-[2rem] dark:text-white">{user.followers_count}</p>
                             <h4 className="dark:text-white">{t('Followers')}</h4>
                         </div>
 
                         <div className="hidden lg:block">
                             <button className="bg-[#E0E1E3] font-semibold rounded-xl px-[4rem] py-[0.5rem] mt-[1rem] lg:mt-[0rem] dark:text-white dark:bg-[#404040]">{t('Share')}</button>
-                            <p className="pt-[2rem] dark:text-white">1</p>
+                            <p className="pt-[2rem] dark:text-white">{user.following_count}</p>
                             <h4 className="dark:text-white">{t('Following')}</h4>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 lg:hidden">
-                            <button className="bg-[#E0E1E3] font-semibold rounded-xl px-[2rem] py-[0.5rem] mt-4">{t('Edit')}</button>
+                            <button className="bg-[#E0E1E3] font-semibold rounded-xl px-[2rem] py-[0.5rem] mt-4"><NavLink to="/accountSettingsCompany">{t('Edit')}</NavLink></button>
                             <button className="bg-[#E0E1E3] font-semibold rounded-xl px-[2rem] py-[0.5rem] mt-4">{t('Share')}</button>
                         </div>
 

@@ -5,9 +5,8 @@ import { CardResult } from '../cards/CardResult';
 import { Navigation } from '../navigation/Navigation';
 import { useFetchMenubar } from "../hooks/useFetchMenubar.js";
 import { SearchDropdown } from '../dropdown/SearchDropdown';
-import { useEffect } from "react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import propTypes from "prop-types";
 
 export function SearchResults() {
     const { isMobile } = useFetchMenubar();
@@ -15,27 +14,14 @@ export function SearchResults() {
     const queryParams = new URLSearchParams(location.search);
     const searchTerm = queryParams.get('name');
     const { data, loading } = useFetchSearch(searchTerm);
-    const [darkMode, setDarkMode] = useState(true);
     const { t } = useTranslation();
 
-    useEffect(() => {
-        if (darkMode) {
-            document.body.classList.add('dark');
-        } else {
-            document.body.classList.remove('dark');
-        }
-    }, [darkMode]);
-
-    const toggleDarkMode = () => {
-        console.log(darkMode);
-        setDarkMode(!darkMode);
-    };
 
     return (
         <>
             <div className="dark:bg-[#2a2a2a] h-full">
                 <div className="flex-shrink-0 fixed top-0 left-0 z-10 h-full">
-                    <Navigation darkMode={toggleDarkMode} />
+                    <Navigation/>
                 </div>
 
                 <main className="flex flex-col lg:px-12 px-5 h-screen overflow-x-hidden"
@@ -65,6 +51,7 @@ export function SearchResults() {
                                         email={result.email}
                                         category_id={result.category_id}
                                         sub_category_id={result.sub_category_id}
+                                        id={result.id}
                                     />
                                 ))
                             ) : (
@@ -80,3 +67,8 @@ export function SearchResults() {
 
     );
 }
+
+SearchResults.propTypes = {
+    toggleDarkMode: propTypes.func,
+    darkMode: propTypes.bool
+};

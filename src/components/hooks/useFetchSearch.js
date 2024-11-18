@@ -18,7 +18,9 @@ export const useFetchSearch = (search_term) => {
                 const translatedData = await Promise.all(result.map(async (item) => {
                     if (i18n.language !== 'es') {
                         const translatedDescription = await translateText(item.description, 'es', i18n.language);
-                        return { ...item, description: translatedDescription }; 
+                        const translateCategory = await translateText(item.category_id, 'es', i18n.language);
+                        const translateSubCategory = await translateText(item.sub_category_id, 'es', i18n.language);
+                        return { ...item, description: translatedDescription, category_id: translateCategory, sub_category_id: translateSubCategory }; 
                     }
                     return item; 
                 }));

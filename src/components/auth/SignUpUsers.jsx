@@ -13,7 +13,7 @@ import logo from "../../assets/imgs/logoCeleste.png";
 export function SignUpUsers() {
 
     const { t } = useTranslation();
-
+    const [step, setStep] = useState(1)
     const [isTooltipVisible, setTooltipVisible] = useState(false);
 
     const handleTooltipToggle = () => {
@@ -82,7 +82,7 @@ export function SignUpUsers() {
         { id: "20", name: "San Jerónimo" },
     ];
 
-    const preferences_1 = [
+    const preferences_1_id = [
         { id: "1", name: "Restaurantes" },
         { id: "2", name: "Sodas" },
         { id: "3", name: "Comida Callejera" },
@@ -107,7 +107,7 @@ export function SignUpUsers() {
         { id: "22", name: "Spas" },
     ];
 
-    const preferences_2 = [
+    const preferences_2_id = [
         { id: "1", name: "Restaurantes" },
         { id: "2", name: "Sodas" },
         { id: "3", name: "Comida Callejera" },
@@ -132,7 +132,7 @@ export function SignUpUsers() {
         { id: "22", name: "Spas" },
     ];
 
-    const preferences_3 = [
+    const preferences_3_id = [
         { id: "1", name: "Restaurantes" },
         { id: "2", name: "Sodas" },
         { id: "3", name: "Comida Callejera" },
@@ -173,78 +173,105 @@ export function SignUpUsers() {
 
     const validateFields = () => {
         let isValid = true;
-    
-        if (!name) {
-            setNameError(true);
-            isValid = false;
-        } else {
-            setNameError(false);
+
+        if(step === 1){
+            if (!name) {
+                setNameError(true);
+                isValid = false;
+            } else {
+                setNameError(false);
+            }
+
+            if (!email) {
+                setEmailError(true);
+                isValid = false;
+            } else {
+                setEmailError(false);
+            }
+
+            if (!password) {
+                setPasswordError(true);
+                isValid = false;
+            } else {
+                setPasswordError(false);
+            }
+        
+            if (password !== password_confirmation) {
+                setPasswordConfirmationError(true);
+                isValid = false;
+            } else {
+                setPasswordConfirmationError(false);
+            }
         }
     
-        if (!email) {
-            setEmailError(true);
-            isValid = false;
-        } else {
-            setEmailError(false);
-        }
+        if(step === 2){
+            if (!selectedPreferences_1) {
+                setPreference1Error(true);
+                isValid = false;
+            } else {
+                setPreference1Error(false);
+            }
     
-        if (!password) {
-            setPasswordError(true);
-            isValid = false;
-        } else {
-            setPasswordError(false);
-        }
+            if (!selectedPreferences_2) {
+                setPreference2Error(true);
+                isValid = false;
+            } else {
+                setPreference2Error(false);
+            }
     
-        if (password !== password_confirmation) {
-            setPasswordConfirmationError(true);
-            isValid = false;
-        } else {
-            setPasswordConfirmationError(false);
+            if (!selectedPreferences_3) {
+                setPreference3Error(true);
+                isValid = false;
+            } else {
+                setPreference3Error(false);
+            }
         }
+        
     
-        if (!selectedCanton) {
-            setCantonError(true);
-            isValid = false;
-        } else {
-            setCantonError(false);
-        }
-    
-        if (!selectedDistrict) {
-            setDistrictError(true);
-            isValid = false;
-        } else {
-            setDistrictError(false);
-        }
-    
-        if (!selectedPreferences_1) {
-            setPreference1Error(true);
-            isValid = false;
-        } else {
-            setPreference1Error(false);
+        if(step === 3){
+            if (!selectedCanton) {
+                setCantonError(true);
+                isValid = false;
+            } else {
+                setCantonError(false);
+            }
+        
+            if (!selectedDistrict) {
+                setDistrictError(true);
+                isValid = false;
+            } else {
+                setDistrictError(false);
+            }
         }
 
-        if (!selectedPreferences_2) {
-            setPreference2Error(true);
-            isValid = false;
-        } else {
-            setPreference2Error(false);
-        }
-
-        if (!selectedPreferences_3) {
-            setPreference3Error(true);
-            isValid = false;
-        } else {
-            setPreference3Error(false);
-        }
-    
         return isValid;
     }
+
+    const handleNextStep = () => {
+        if (validateFields(step)) {
+            setStep(step + 1);
+        }
+    };
+
+    const handlePreviousStep = () => {
+        if (step > 1) {
+            setStep(step - 1);
+        }
+    };
     
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-    
+        console.log("Nombre:", name);
+        console.log("Email:", email);
+        console.log("Contraseña:", password);
+        console.log("Confirmar Contraseña:", password_confirmation);
+        console.log("Canton:", selectedCanton);
+        console.log("Distrito:", selectedDistrict);
+        console.log("Preferencia 1:", selectedPreferences_1);
+        console.log("Preferencia 2:", selectedPreferences_2);
+        console.log("Preferencia 3:", selectedPreferences_3);
 
         if (!validateFields()) {
             setShowError(true);
@@ -263,6 +290,7 @@ export function SignUpUsers() {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
 
+                console.log(latitude, longitude);
 
                 const response = await fetch('https://myescape.online/api/register', {
                     method: 'POST',
@@ -277,9 +305,9 @@ export function SignUpUsers() {
                         longitude: longitude,
                         canton_id: selectedCanton,
                         district_id: selectedDistrict,
-                        preferences_1: selectedPreferences_1,
-                        preferences_2: selectedPreferences_2,
-                        preferences_3: selectedPreferences_3,
+                        preferences_1_id: selectedPreferences_1,
+                        preferences_2_id: selectedPreferences_2,
+                        preferences_3_id: selectedPreferences_3,
 
                     })
                 });
@@ -314,9 +342,9 @@ export function SignUpUsers() {
                         longitude: null,
                         canton_id: selectedCanton,
                         district_id: selectedDistrict,
-                        preferences_1: selectedPreferences_1,
-                        preferences_2: selectedPreferences_2,
-                        preferences_3: selectedPreferences_3,
+                        preferences_1_id: selectedPreferences_1,
+                        preferences_2_id: selectedPreferences_2,
+                        preferences_3_id: selectedPreferences_3,
                     })
                 });
 
@@ -346,120 +374,140 @@ export function SignUpUsers() {
             <div className="flex justify-center items-center">
 
                 <form className="w-full lg:w-2/4" onSubmit={handleSubmit}>
-                    <img className="w-[15rem] mx-auto mt-8 mb-16" src={logo} alt="Logo" />
-                    <h2 className="text-3xl font-bold text-center mb-8 text-sky-500">Sing Up</h2>
-                    <div className="grid lg:grid-cols-2 gap-4">
-                        <div>
-                            <AuthInput label={t('iName')} name="name" placeholder={t('iName')} type="text" onChange={e => setName(e.target.value)} className="{nameError ? 'border-red-500' : ''}"/> {nameError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                            <AuthInput label={t('iEmail')} name="email" placeholder={t('iEmail')} type="email" onChange={e => setEmail(e.target.value)} className="{emailError ? 'border-red-500' : ''}"/> {emailError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                            <AuthInput label={t('iPassword')} name="password" placeholder={t('iPassword')} type="password" onChange={e => setPassword(e.target.value)} className="{passwordError ? 'border-red-500' : ''}" /> {passwordError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                            <AuthInput label={t('iConfirmPassword')} name="passwordConfirm" placeholder={t('iConfirmPassword')} type="password" onChange={e => setPassword_confirmation(e.target.value)} className="{passwordConformationError ? 'border-red-500' : ''}"/> {passwordConfirmationError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
-                            <div className="items-center relative mt-[3rem] lg:flex hidden">
-                                <input className="shadow-md p-3 rounded-lg border-none" type="checkbox" id="share-location" name="shareLocation" />
-                                <label htmlFor="share-location" className="ml-4 text-sky-500 font-medium">{t('ShareLocation')}</label>
-                                <div className="ml-2 relative">
-                                    <svg onClick={handleTooltipToggle} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 stroke-gray-400 cursor-pointer">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                                    </svg>
+                    <img className="w-[12rem] mx-auto mt-8 mb-9 " src={logo} alt="Logo" /> 
+                    <h2 className="text-4xl font-bold text-center text-sky-500">{t('signup')}</h2>
+                    <div className="grid gap-4 mt-8">
 
-                                    {/* Tooltip */}
-                                    {isTooltipVisible && (
-                                        <div className="absolute left-0 top-10 z-10 w-48 bg-white shadow-lg p-3 rounded-lg text-sm text-gray-700">
-                                            <p>{t('ShareLocationInfo')}</p>
-                                            <button
-                                                className="text-sky-500 mt-2"
-                                                onClick={handleTooltipToggle}
-                                            >
-                                                {t('GotIt')}
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
+                        {step === 1 && (
+                            <div>
+                                <AuthInput label={t('iName')} name="name" placeholder={t('iName')} type="text" onChange={e => setName(e.target.value)} className="{nameError ? 'border-red-500' : ''}"/> {nameError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                                <AuthInput label={t('iEmail')} name="email" placeholder={t('iEmail')} type="email" onChange={e => setEmail(e.target.value)} className="{emailError ? 'border-red-500' : ''}"/> {emailError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                                <AuthInput label={t('iPassword')} name="password" placeholder={t('iPassword')} type="password" onChange={e => setPassword(e.target.value)} className="{passwordError ? 'border-red-500' : ''}" /> {passwordError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
+                                <AuthInput label={t('iConfirmPassword')} name="passwordConfirm" placeholder={t('iConfirmPassword')} type="password" onChange={e => setPassword_confirmation(e.target.value)} className="{passwordConformationError ? 'border-red-500' : ''}"/> {passwordConfirmationError && <p className="text-red-500 text-sm mb-5">Este campo es obligatorio</p>}
                             </div>
-                        </div>
-                        <div>
-                            <Selected
+                        )}
+
+                        {step === 2 && (
+                            <div>
+                                <Selected
+                                    label={t('choosePreference')}
+                                    options={preferences_1_id}
+                                    placeholder={t('preference') + ' 1'}
+                                    onChange={e => setSelectedPreferences_1(e.target.value)}
+                                    className={preference1Error ? 'border-red-500' : ''}
+                                    cBorder="border-none outline-none"
+                                />
+                                {preference1Error && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una preferencia</p>}
+
+
+                                <Selected
+                                    label={t('choosePreference')}
+                                    options={preferences_2_id}
+                                    placeholder={t('preference') + ' 2'}
+                                    onChange={e => setSelectedPreferences_2(e.target.value)}
+                                    className={preference2Error ? 'border-red-500' : ''}
+                                    cBorder="border-none outline-none"
+                                />
+                                {preference2Error && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una preferencia</p>}
+
+                                <Selected
+                                    label={t('choosePreference')}
+                                    options={preferences_3_id}
+                                    placeholder={t('preference') + ' 3'}
+                                    onChange={e => setSelectedPreferences_3(e.target.value)}
+                                    className={preference3Error ? 'border-red-500' : ''}
+                                    cBorder="border-none outline-none"
+                                />
+                                {preference3Error && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una preferencia</p>}                         
+                            </div>
+                        )}
+
+                        {step === 3 && (
+                            <div>
+                                <Selected
                                 label={t('Canton')}
                                 options={canton_id}
                                 placeholder={t('Canton')}
                                 onChange={e => setSelectedCanton(e.target.value)}
                                 className={cantonError ? 'border-red-500' : ''}
-                            />
-                            {cantonError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona un cantón</p>}
+                                cBorder="border-none outline-none"
+                                />
+                                {cantonError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona un cantón</p>}
 
-                            <Selected
-                                label={t('District')}
-                                options={districts.map(district => ({ id: district.id, name: district.name }))}
-                                placeholder={t('District')}
-                                onChange={e => setSelectedDistrict(e.target.value)}
-                                className={districtError ? 'border-red-500' : ''}
-                            />
-                            {districtError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona un distrito</p>}
+                                <Selected
+                                    label={t('District')}
+                                    options={districts.map(district => ({ id: district.id, name: district.name }))}
+                                    placeholder={t('District')}
+                                    onChange={e => setSelectedDistrict(e.target.value)}
+                                    className={districtError ? 'border-red-500' : ''}
+                                    cBorder="border-none outline-none"
+                                />
+                                {districtError && <p className="text-red-500 text-sm mb-5">Por favor, selecciona un distrito</p>}
 
-                            <Selected
-                                label={t('Preference_1')}
-                                options={preferences_1}
-                                placeholder={t('Preference_1')}
-                                onChange={e => setSelectedPreferences_1(e.target.value)}
-                                className={preference1Error ? 'border-red-500' : ''}
-                            />
-                            {preference1Error && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una preferencia</p>}
+                                <div className="flex items-center relative my-[1.5rem]">
+                                    <input className="shadow-md p-3 rounded-lg border-none" type="checkbox" id="share-location" name="shareLocation" />
+                                    <label htmlFor="share-location" className="ml-4 text-sky-500 font-medium">{t('ShareLocation')}</label>
+                                    <div className="ml-2 relative">
+                                        <svg onClick={handleTooltipToggle} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 stroke-gray-400 cursor-pointer">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                                        </svg>
 
-
-                            <Selected
-                                label={t('Preference_2')}
-                                options={preferences_2}
-                                placeholder={t('Preference_2')}
-                                onChange={e => setSelectedPreferences_2(e.target.value)}
-                                className={preference2Error ? 'border-red-500' : ''}
-                            />
-                            {preference2Error && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una preferencia</p>}
-
-                            <Selected
-                                label={t('Preference_3')}
-                                options={preferences_3}
-                                placeholder={t('Preference_3')}
-                                onChange={e => setSelectedPreferences_3(e.target.value)}
-                                className={preference3Error ? 'border-red-500' : ''}
-                            />
-                            {preference3Error && <p className="text-red-500 text-sm mb-5">Por favor, selecciona una preferencia</p>}
-
-
-                            <div className="items-center relative mt-[1rem] flex lg:hidden">
-                                <input className="shadow-md p-3 rounded-lg border-none" type="checkbox" id="share-location" name="shareLocation" />
-                                <label htmlFor="share-location" className="ml-4 text-sky-500 font-medium">{t('ShareLocation')}</label>
-                                <div className="ml-2 relative">
-                                    <svg onClick={handleTooltipToggle} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 stroke-gray-400 cursor-pointer">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                                    </svg>
-
-                                    {/* Tooltip */}
-                                    {isTooltipVisible && (
-                                        <div className="absolute left-0 top-10 z-10 w-48 bg-white shadow-lg p-3 rounded-lg text-sm text-gray-700">
-                                            <p>{t('ShareLocationInfo')}</p>
-                                            <button
-                                                className="text-sky-500 mt-2"
-                                                onClick={handleTooltipToggle}
-                                            >
-                                                {t('GotIt')}
-                                            </button>
-                                        </div>
-                                    )}
+                                        {/* Tooltip */}
+                                        {isTooltipVisible && (
+                                            <div className="absolute left-0 top-10 z-10 w-48 bg-white shadow-lg p-3 rounded-lg text-sm text-gray-700">
+                                                <p>{t('ShareLocationInfo')}</p>
+                                                <button
+                                                    className="text-sky-500 mt-2"
+                                                    onClick={handleTooltipToggle}
+                                                >
+                                                    {t('GotIt')}
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
+
                             </div>
-
-                        </div>
+                        )}
                     </div>
-                    <input
-                        className="text-white p-3 bg-sky-500 flex rounded-xl items-center justify-center w-full lg:my-8 my-10 font-bold text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:bg-blue-800 hover:text-white"
-                        type="submit"
-                        name="btn-signup"
-                        value={t('signup')}
-                    />
 
-                    <p className="text-gray-400 text-center">{t('goSignIn')}
-                        <NavLink className="text-sky-500 ml-2 mb-3 font-medium" to="/signIn">{t('iSignIn')}</NavLink>
-                    </p>
+                    <div
+                        className={`flex my-5 ${step === 3 ? 'flex-col gap-4' : 'justify-between gap-4'}`}
+                    >
+                        {step > 1 && (
+                            <button
+                                type="button"
+                                onClick={handlePreviousStep}
+                                className="text-sky-500 p-3 hover:bg-sky-500 border-2 border-sky-500 flex rounded-xl items-center justify-center w-full font-bold text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:text-white"
+                            >
+                                {t('back')}
+                            </button>
+                        )}
+                        {step < 3 ? (
+                            <button
+                                type="button"
+                                onClick={handleNextStep}
+                                className="text-sky-500 p-3 hover:bg-sky-500 border-2 border-sky-500 flex rounded-xl items-center justify-center w-full font-bold text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:text-white"
+                            >
+                                {t('next')}
+                            </button>
+                        ) : (
+                            <div className="w-full">
+                                <input
+                                    className="text-white p-3 bg-sky-500 flex rounded-xl items-center justify-center w-full font-bold text-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:bg-blue-800 hover:text-white"
+                                    type="submit"
+                                    name="btn-signup"
+                                    value={t('signup')}
+                                />
+
+                                <p className="text-gray-400 text-center mt-4 dark:text-white">{t('goSignIn')}
+                                    <NavLink className="text-sky-500 ml-2 mb-3 font-medium" to="/signIn">{t('iSignIn')}</NavLink>
+                                </p>
+                            </div>
+                        )}
+                    </div>
+
+                    
                 </form>
             </div>
 

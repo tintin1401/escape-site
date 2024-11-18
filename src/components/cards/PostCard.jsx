@@ -11,7 +11,7 @@ import { useFetchComments } from "../hooks/useFetchComments.js";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 export function PostCard({
   id,
@@ -69,16 +69,20 @@ export function PostCard({
   return (
     <div className=" items-center py-4 justify-between lg:max-w-sm sm:w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-[#404040] dark:border-gray-700">
       <div className="flex items-center px-4 ">
-        <img
-          alt={name + 'Post' + id}
-          src={profilePicture}
-          className=" inline-block h-10 w-10 rounded-full"
-        />
-
+        <NavLink to="/InformationCompany" state={companyId}>
+          <img
+            alt={name + 'Post' + id}
+            src={profilePicture}
+            className=" inline-block h-10 w-10 rounded-full"
+          />
+        </NavLink>
+    
         <div className="flex flex-col ml-3 text-sm">
-          <span className="text-black font-semibold text-lg dark:text-white">
-            {name}
-          </span>
+          <NavLink to="/InformationCompany" state={companyId}>
+            <span className="text-black font-semibold text-lg dark:text-white">
+              {name}
+            </span> 
+          </NavLink>
           <span className="text-[#9A9797] dark:text-[#BCBCBC]">
             {category} - {city}
           </span>

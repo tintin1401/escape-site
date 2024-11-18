@@ -4,7 +4,7 @@ import { useUser } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { translateText } from './translateText';
 
-export const usePosts = (userTypeFilter = null) => {
+export const usePosts = (userTypeFilter = null, company_id = null) => {
     const { id } = useParams();
     const [description, setDescription] = useState('');
     const [files, setFiles] = useState([]);
@@ -18,9 +18,23 @@ export const usePosts = (userTypeFilter = null) => {
 
     const fetchPosts = async () => {
         try {
-            const url = userTypeFilter === 1
-                ? 'https://myescape.online/api/company-posts'
-                : 'https://myescape.online/api/posts';
+            let url;
+
+            if (company_id !== null) {
+                url = new URL(`https://myescape.online/api/company-posts`);
+                url.searchParams.append('company_id', company_id);
+            } else {
+                const baseUrl = userTypeFilter === 1
+                    ? 'https://myescape.online/api/company-posts'
+                    : 'https://myescape.online/api/posts';
+
+                url = new URL(baseUrl);
+                if (user.user_type_id === 1) {
+                    url.searchParams.append('company_id', user.id);
+                } else {
+                    url.searchParams.append('user_id', user.id);
+                }
+            }
 
             const response = await fetch(url, {
                 method: 'GET',
@@ -60,12 +74,20 @@ export const usePosts = (userTypeFilter = null) => {
 
     const handleLikePost = async (postId) => {
         try {
+            const body = {};
+            if (user.user_type_id === 1) {
+                body.company_id = user.id;
+            } else if (user.user_type_id === 2) {
+                body.user_id = user.id;
+            }
+
             const response = await fetch(`https://myescape.online/api/posts/${postId}/like`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify(body),
             });
             if (!response.ok) {
                 throw new Error('Error al gestionar el like');
@@ -80,7 +102,6 @@ export const usePosts = (userTypeFilter = null) => {
                         ? { ...post, liked: !post.liked, likes_count: result.likes_count }
                         : post
                 )
-
             );
 
         } catch (error) {
@@ -123,14 +144,13 @@ export const usePosts = (userTypeFilter = null) => {
 
         const formData = new FormData();
         formData.append('description', description);
+        formData.append('company_id', user.id);
 
         if (files.length > 0) {
             for (let i = 0; i < files.length; i++) {
                 formData.append('files[]', files[i]);
             }
         }
-
-        formData.append('company_id', user.id);
 
         try {
             const response = await fetch('https://myescape.online/api/create/post', {
@@ -288,6 +308,8 @@ export const usePosts = (userTypeFilter = null) => {
         try {
             const response = await fetch(`https://myescape.online/api/delete/post/${id}`, {
                 method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ company_id: user.id }),
                 credentials: 'include',
             });
 
@@ -315,6 +337,7 @@ export const usePosts = (userTypeFilter = null) => {
     useEffect(() => {
         fetchPosts();
     }, []);
+
 
     return {
         posts,
